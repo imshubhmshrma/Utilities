@@ -1,0 +1,104 @@
+//
+//  SoapApi.swift
+//  
+//
+//  Created by Shubham on 3/20/18.
+//  Copyright © 2018 Shubham. All rights reserved.
+//
+// here is use 3 Party pod that is SWXMLHash
+import Foundation
+import SWXMLHash
+
+// https://www.freeformatter.com/xml-to-json-converter.html#ad-output
+//http://graysonshare.cgmcc.com/webservice/handhelddataaccess.asmx?op=SelectCompanies
+
+
+struct SoapSelectCompanyIncomming {
+// here we declare a structure that contains the response from the Api 
+	var companies : [Company] = []
+	struct Company {
+		var companyPKUID : String?
+		var companyName : String?
+		var companyEmailDomain : String?
+	}
+}
+
+// here we declare a class with the values that we are going to send to the Api
+class SoapSelectCompanyOutgoing{
+
+	var soapSelectCompanyIncomming  = SoapSelectCompanyIncomming()
+	var closureDidGetCompaniesList : ((SoapSelectCompanyIncomming) -> Void)?
+	 func request() {
+		let headers = [
+			"content-type": "text/xml; charset=utf-8",
+			"soapaction": HERE_WRITE_THE_SOAP_ACTION,
+			"cache-control": "no-cache",
+		]
+
+		let postData = NSData(data: "<?xml version='1.0' encoding='utf-8'?><soap:Envelope xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'><soap:Body><SelectCompanies xmlns='http://SlideRide.com/' /></soap:Body></soap:Envelope>".data(using: String.Encoding.utf8)!)
+        
+		let request = NSMutableURLRequest(url: NSURL(string: "URL_OF_API")! as URL,
+																			cachePolicy: .useProtocolCachePolicy,
+																			timeoutInterval: 10.0)
+
+		request.httpMethod = "POST"
+		request.allHTTPHeaderFields = headers
+		request.httpBody = postData as Data
+		let session = URLSession.shared
+		let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+			if (error != nil) {
+				print("🚨",error!)
+			} else {
+      
+				let httpResponse = response as? HTTPURLResponse
+                print("🧛‍♀️ SoapSelectCompany API httpResponse ",httpResponse! ,"\n SoapSelectCompany API Data 🍎" , data!)
+				//parser
+
+				let str = String.init(data: data!, encoding: .utf8)
+
+				let xml = SWXMLHash.parse(str!)
+				let xml2 = SWXMLHash.parse((xml["soap:Envelope"]["soap:Body"]["SelectCompaniesResponse"]["SelectCompaniesResult"].element?.text)!)//in this make sure write the exact keywords to response block
+				_ = xml2["Companies"]["Company"].all.map({ (element ) -> Void in
+					let company : SoapSelectCompanyIncomming.Company = SoapSelectCompanyIncomming.Company(companyPKUID: element["CompanyPKUID"].element!.text,
+																													 companyName: element["CompanyName"].element!.text, companyEmailDomain: element["CompanyEmailDomain"].element!.text)
+					self.soapSelectCompanyIncomming.companies.append(company)
+				})
+		//print("🌸" ,self.soapSelectCompanyIncomming.companies)
+     self.closureDidGetCompaniesList?(self.soapSelectCompanyIncomming)
+			}
+		})
+
+		dataTask.resume()
+	}
+}
+
+/*
+// u can use this function in the view controller where u want fetch the data 
+    func getCompanyList(){
+    
+    // here i want to show data in picker view , so I did like this , how ever the data in side the clisure , u can use that 
+        let some = SoapSelectCompanyOutgoing()
+        some.closureDidGetCompaniesList = { request in
+            DispatchQueue.main.async {
+                self.txtCompany.resetData(companies: request.companies)
+            }
+        }
+        some.request()
+        self.txtCompany.closureDidSelectCompany = { company in
+            self.country = company
+            self.companyPKUId = company.companyPKUID!
+            print("🦋", company.companyPKUID!)
+        }
+    }
+
+*/
+
+
+/*		let some = SoapSelectCompanyOutgoing()
+some.closureDidGetCompaniesList = { request in
+print(request.companies.count)
+
+}
+some.request()
+
+*/
