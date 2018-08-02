@@ -180,3 +180,26 @@ Use this functions to fetch details in the ViewController
     }
 
 */
+
+
+
+/*
+write this code in ViewDidload 
+so that the textfield(txtSelectModel) should fetch and show the details from the Api
+
+
+        txtCarMake.closureDidSelectCarMake = { carMake in
+           
+         self.carMake = carMake
+            self.getCarModel(makeId: carMake.makeId!)
+            self.txtSelectModel.closureDidSelectCarModel = { carModel in
+                self.carModel = carModel
+                print("🚘 Make Selected",carModel.modelMakeId!)
+                self.make = carModel.modelMakeId!
+                print("🚗 Model Selected",carModel.modelName!)
+                self.model = carModel.modelName!
+            }
+            
+        }
+
+*/
