@@ -148,3 +148,35 @@ class LeoCarMakeTextField: UITextField, UIPickerViewDelegate, UIPickerViewDataSo
     
 }
 
+
+
+/*
+Use this functions to fetch details in the ViewController
+
+
+    func getCarMake(){
+        
+//        let  urlString : String  = "https://www.carqueryapi.com/api/0.3/?=?&cmd=getMakes"
+           let fileUrl = URL(string: "https://www.carqueryapi.com/api/0.3/?=?&cmd=getMakes")
+         print("💇🏼‍♀️",fileUrl)
+        
+        
+        WebServices.get(url: fileUrl! as URL, completionHandler: { (response, _) in
+           
+            print("",response)
+            
+           
+            
+            self.apiCarMake = LeoCarMake(response: response)
+            
+            // self.txtSelectMake.carMake = self.apiCarMakes?.carMakes ?? []
+            
+            self.txtCarMake.configure(carMake: self.apiCarMake?.carMakes ?? [])
+            
+            
+        }) { (response, _) in
+            
+        }
+    }
+
+*/
