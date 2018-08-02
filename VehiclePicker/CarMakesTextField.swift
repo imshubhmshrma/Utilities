@@ -1,8 +1,8 @@
 //
 //  CarModels.swift
 //
-//  Created by Anupriya on 20/11/17.
-//  Copyright © 2017 vijay vir. All rights reserved.
+//  Created by Shubham on 20/11/17.
+//  Copyright © 2017 Shubham. All rights reserved.
 //
 
 import Foundation
