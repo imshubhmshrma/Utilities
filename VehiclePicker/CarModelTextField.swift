@@ -145,4 +145,30 @@ class LeoCarModelTextField: UITextField, UIPickerViewDelegate, UIPickerViewDataS
     
 }
 
+/*
 
+pass the makeId in tjis function to get the Car model
+
+    func getCarModel(makeId : String){
+  
+        let fileUrl = URL(string: "https://www.carqueryapi.com/api/0.3/?=?&cmd=getModels&make=\(makeId)")
+        
+        WebServices.get(url: fileUrl!, completionHandler: { (response, _) in
+   
+          self.apiCarModel = LeoCarModel(response: response)
+            
+          self.txtSelectModel?.configure(carModels: self.apiCarModel?.carModels ?? [])
+            
+            //self.txtSelectModel?.carModel = self.apiCarModel?.carModels ?? []
+            
+            
+        }) { (response, _) in
+            
+           
+        }
+        
+        
+        
+    }
+
+*/
