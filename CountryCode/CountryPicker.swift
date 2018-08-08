@@ -1,9 +1,9 @@
 //
 //  CountryPicker.swift
-//  NXSpot
+//  
 //
-//  Created by Anupriya on 16/11/17.
-//  Copyright © 2017 vijay vir. All rights reserved.
+//  Created by Shubham on 16/11/17.
+//  Copyright © 2017 Shubham. All rights reserved.
 //
 
 import Foundation
