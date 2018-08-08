@@ -2,8 +2,8 @@
 //  CountryCodeViewController.swift
 //  CountryCode
 //
-//  Created by Shaik Baji on 26/06/18.
-//  Copyright © 2018 smartitventures.com. All rights reserved.
+//  Created by Shubham on 26/06/18.
+//  Copyright © 2018 Shubham All rights reserved.
 //
 
 import UIKit
