@@ -1,0 +1,50 @@
+//
+//  ShareViewController.swift
+//  
+//
+//  Created by Shubham on 26/06/18.
+//  Copyright © 2018 Shubham. All rights reserved.
+//
+
+import UIKit
+
+class ShareViewController: UIViewController {
+
+    @IBOutlet var viewObject: UIView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        //Please Be patient for 10-15 sec u can get pop up to Share from UIAlertActionSheet..
+        
+       appShare(sender:viewObject)
+    }
+
+    func appShare(sender:UIView)
+    {
+        let textToShare = "Swift is awesome!  Check out this website about it!"
+        
+        if let myWebsite = NSURL(string: "YOUR_URL_HERE") //Here we will share our app to User's  use your  App Url
+        {
+            let objectsToShare = [textToShare, myWebsite] as [Any]
+            let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+            
+            //New Excluded Activities Code
+            activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
+            //
+            
+            activityVC.popoverPresentationController?.sourceView = sender
+            self.present(activityVC, animated: true, completion: nil)
+        }
+        
+    }
+}
+
+
+/*
+how to use , you can create an outlet of view and pass that view to function to load that functionality by calling it in ViewDiD load
+Or you can create a button in story board , create its action and outlet , then change the parameter type of UIView to UIButton of function and then pass the outlet of the button in its action to function 
+
+Thanks
+
+*/
