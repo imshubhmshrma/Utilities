@@ -1,0 +1,134 @@
+//
+//  UserDefaultSignUpInfo.swift
+//  
+//
+//  Created by Shubham on 29/06/18.
+//  Copyright © 2018 Shubham. All rights reserved.
+//
+/*
+if this would be the response from the Api when a user log in or Sign Up
+ {
+ "isSuccess": true,
+ "isError": false,
+ "message": "Thanks For Registering With US",
+ "payLoad": {
+ "name": "name",
+ "email": "email@email.com",
+ "phone": null,
+ "sex": null,
+ "image": null,
+ "id": 7
+ }
+ }*/
+ 
+ 
+import Foundation
+struct DefaultSignUpUserInfo {
+    var aOrC: String?
+    var createdAt: String?
+    var emailAddress: String?
+    var id: Int?
+    var name: String?
+    var phoneNumber : String?
+    var sex: String?
+    var updatedAt: String?
+    var userPic: String?
+    var urlUserPic : URL? {
+    // here return the complete URL of the Image
+        return URL(string :  "BASE_URL" + "\(userPic)")
+    }
+    
+    init(response: AnyObject){
+        if let body = response["payLoad"] as? [String: Any]{
+            aOrC = body["a_or_c"] as? String
+            createdAt = body["created_at"] as? String
+            id = body["id"] as? Int
+            emailAddress = body["email"] as? String
+            name = body["name"] as? String
+            phoneNumber = body["tel"] as? String
+            sex = body["sex"] as? String
+            updatedAt = body["updated_at"] as? String
+            userPic = body["user_pic"] as? String
+        }
+    }
+    init(aOrC: String,createdAt: String, id: Int, emailAddress: String, name: String, phoneNumber: String, sex: String,updatedAt: String,userPic: String ) {
+        self.aOrC = aOrC
+        self.createdAt = createdAt
+        self.id = id
+        self.emailAddress = emailAddress
+        self.name = name
+        self.phoneNumber = phoneNumber
+        self.sex = sex
+        self.updatedAt =  updatedAt
+        self.userPic = userPic
+    }
+}
+extension DefaultSignUpUserInfo {
+    public func defaultSignUpUserInfoDictionary() -> [String: Any] {
+        let dictionary = NSMutableDictionary()
+        dictionary.setValue(self.aOrC, forKey: "a_or_c")
+        dictionary.setValue(self.createdAt, forKey: "created_at")
+        dictionary.setValue(self.id, forKey: "id")
+        dictionary.setValue(self.emailAddress, forKey: "email")
+        dictionary.setValue(self.name, forKey: "name")
+        dictionary.setValue(self.phoneNumber, forKey: "phone")
+        dictionary.setValue(self.sex, forKey: "sex")
+        dictionary.setValue(self.updatedAt, forKey: "updated_at")
+        dictionary.setValue(self.userPic, forKey: "user_pic")
+        let payload = NSMutableDictionary()
+        payload.setValue(dictionary, forKey: "payLoad")
+        return payload as! [String : Any]
+    }
+}
+
+
+
+// here we use the same structure that we defive while fetching the data from Api
+//user default variable
+var userDefaultSignUpUserInfo: DefaultSignUpUserInfo? {
+    get {
+        if (UserDefaults.standard.object(forKey: "userDefaultSignUpUserInfo") != nil) {
+            if let data = UserDefaults.standard.object(forKey: "userDefaultSignUpUserInfo") as? Data {
+                print("🚹⚔️🚹⚔️🚹⚔️🚹",data)
+                let unarc = NSKeyedUnarchiver(forReadingWith: data)
+                let rawValue = unarc.decodeObject(forKey: "root") as AnyObject
+                return DefaultSignUpUserInfo(response: rawValue)
+            } else {
+                return nil
+            }
+        }
+        return nil
+    }
+    set {
+        if newValue != nil {
+            let archiveData = NSKeyedArchiver.archivedData(withRootObject: newValue?.defaultSignUpUserInfoDictionary() ?? nil)
+            let ud = UserDefaults.standard
+            ud.set( archiveData, forKey: "userDefaultSignUpUserInfo")
+            ud.synchronize()
+        } else{
+            let ud = UserDefaults.standard
+            ud.set( nil, forKey: "userDefaultSignUpUserInfo")
+            ud.synchronize()
+        }
+    }
+}
+
+/*
+how to add data into this 
+
+
+use this to add data into this
+
+                defaultUserInfo =  DefaultUserInfo(id: (self.apiUserInfoIncomming?.userInfos?.id)!,
+                                                           emailAddress: (self.apiUserInfoIncomming?.userInfos?.emailAddress)!, name: (self.apiUserInfoIncomming?.userInfos?.name)!, phoneNumber: (self.apiUserInfoIncomming?.userInfos?.phoneNumber)!, sex: (self.apiUserInfoIncomming?.userInfos?.sex)!, userPic: (self.apiUserInfoIncomming?.userInfos?.userPic)!)
+
+
+*/
+
+/*
+
+retrieving data
+
+someTextField.text = defaultUserInfo.name
+
+*/
