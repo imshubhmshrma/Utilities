@@ -1,0 +1,51 @@
+//
+//  safe.swift
+//  Extentions
+//
+//  Created by Shubham on 9/12/17.
+//  Copyright © 2017 Shubham. All rights reserved.
+//
+
+import Foundation
+
+//https://medium.com/ios-os-x-development/handling-empty-optional-strings-in-swift-ba77ef627d74
+
+extension Optional where Wrapped == String {
+
+	func safe(defaultValue : String? = "") -> String {
+
+		guard let strongSelf = self else {
+			return defaultValue!
+		}
+
+		return strongSelf.isEmpty ? defaultValue! : strongSelf
+	}
+}
+
+extension Optional where Wrapped == Int {
+
+	func safe(defaultValue : Int? = 0 ) -> Int? {
+
+		guard let strongSelf = self else {
+			return defaultValue
+		}
+
+		return strongSelf
+	}
+}
+
+extension Optional where Wrapped == Bool {
+
+	func safe(defaultValue : Bool? = false ) -> Bool? {
+
+		guard let strongSelf = self else {
+			return defaultValue
+		}
+
+		return strongSelf
+	}
+}
+/*
+how to use
+simple import this file in ur projetc and then simple give these functions name to respected string where there might exception came and enjoy
+*/
