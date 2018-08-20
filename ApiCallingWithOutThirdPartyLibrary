@@ -1,0 +1,48 @@
+func hitApiLogIn(){
+    let emaill = txtEmailAddress.text!
+    let passwordd =  txtPassword.text!
+    
+    let headers = [
+        "content-type": "application/json",
+        "cache-control": "no-cache",
+    ]
+    let parameters = [
+        "Email": "\(emaill)",
+        "Password": "\(passwordd)"
+        ] as [String : Any]
+    
+    
+    if let postData = (try? JSONSerialization.data(withJSONObject: parameters, options: [])) {
+        
+        let request = NSMutableURLRequest(url: NSURL(string: "API__URL__HERE")! as URL,
+                                          cachePolicy: .useProtocolCachePolicy,
+                                          timeoutInterval: 50.0)
+        request.httpMethod = "POST"
+        request.allHTTPHeaderFields = headers
+        request.httpBody = postData as Data
+        
+        let session = URLSession.shared
+        let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+            if (error != nil) {
+                print(error)
+            } else {
+                let httpResponse = response as? HTTPURLResponse
+                print("🅰️",httpResponse)
+                if httpResponse?.statusCode == 200{
+                    DispatchQueue.main.async(execute: {
+                        
+                        if let json = (try? JSONSerialization.jsonObject(with: data!, options: [])) as? NSDictionary
+                        {
+                            let success = json["success"] as? Bool
+                            let message = json["message"] as? String
+                            print("👊🏻  \(success!) ,,, \(message!) )
+                        }
+                    })
+                }
+            }
+        })
+        
+        dataTask.resume()
+    }
+
+    }
